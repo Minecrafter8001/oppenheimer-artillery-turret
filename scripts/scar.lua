@@ -172,6 +172,28 @@ end
 
 events.on(defines.events.on_chunk_generated, on_chunk_generated)
 
+--- Forget everything recorded against a deleted surface: its index can be
+--- reused, and a stale scar would replay an old blast onto the new surface.
+local function on_surface_deleted(event)
+  local si = event.surface_index
+  for _, list in ipairs({storage.scars, storage.shots}) do
+    for i = #list, 1, -1 do
+      if list[i].surface == si then table.remove(list, i) end
+    end
+  end
+  if storage.strike_cells then storage.strike_cells[si] = nil end
+  local prefix = si .. ":"
+  for k in pairs(storage.flora or {}) do
+    if k:sub(1, #prefix) == prefix then storage.flora[k] = nil end
+  end
+  local suffix = ":" .. si
+  for k in pairs(storage.alpha_order or {}) do
+    if type(k) == "string" and k:sub(-#suffix) == suffix then storage.alpha_order[k] = nil end
+  end
+end
+
+events.on(defines.events.on_surface_deleted, on_surface_deleted)
+
 --- How many footprints are on record, for /oppenheimer-status.
 function scar.count()
   local s = storage.scars

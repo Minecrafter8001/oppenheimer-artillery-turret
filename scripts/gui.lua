@@ -270,7 +270,7 @@ local function note_of(rec, force)
   if ov ~= "" then return ov, {"oppenheimer.fc-overdraw-tip"} end
   local pw = power_note(rec)
   if pw ~= "" then return pw, {"oppenheimer.fc-overpower-tip"} end
-  return cap_note(force), {"oppenheimer.fc-cap-tip"}
+  return cap_note(force, #crew_of(rec)), {"oppenheimer.fc-cap-tip"}
 end
 
 -- =============================================================================
@@ -420,7 +420,7 @@ function gui.on_click(event)
     end
   elseif el.name == N.gui.fire_abort then
     local e = rec.entity
-    if e and e.valid then alpha.drop(e.force.index) end
+    if e and e.valid then alpha.drop(e.force, e.surface) end
     for _, r in ipairs(crew) do
       if not arcsweep.cancel(r) then turret.scrub(r) end
     end
@@ -452,11 +452,12 @@ local HUD_LAYOUT = 4
 -- #107: ALL of them, not just the busy ones. A super weapon's status board is
 -- supposed to be sitting there whether or not it is doing something -- that IS
 -- the presence. The player hides it with the shortcut if they want it gone.
-local function notable(force)
+-- Viewed surface only: a battery is per surface (schema.crew).
+local function notable(force, surface)
   local out = {}
   for un, rec in pairs(storage.turrets or {}) do
     local e = rec.entity
-    if e and e.valid and e.force == force then
+    if e and e.valid and e.force == force and e.surface == surface then
       out[#out + 1] = {un = un, rec = rec}
     end
   end
@@ -618,12 +619,14 @@ function overdraw_of(rec)
           tostring(turret.linked_count(rec)), tostring(C.pylon.max_count)}
 end
 
---- Installations owned against the researched capacity, or "" once fully researched.
-function cap_note(force)
+--- Installations on this surface, then the force's total against the researched
+--- capacity, or "" once fully researched.
+function cap_note(force, here)
   local cap = C.capacity(force)
   local top = 1 + C.tech.capacity_levels
   if cap >= top then return "" end
-  return {"oppenheimer.capacity-note", tostring(alpha.count(force)), tostring(cap), tostring(top)}
+  return {"oppenheimer.capacity-note", tostring(here), tostring(alpha.count(force)),
+          tostring(cap), tostring(top)}
 end
 
 --- The milestone this trigger energy is standing on, or nil for "between".
@@ -1121,7 +1124,7 @@ function gui.refresh_hud(player)
     root = nil
     storage.hud_sig[player.index] = nil
   end
-  local rows = storage.hud_hidden[player.index] and {} or notable(player.force)
+  local rows = storage.hud_hidden[player.index] and {} or notable(player.force, player.surface)
 
   if #rows == 0 then
     if root and root.valid then root.destroy() end
@@ -1156,16 +1159,18 @@ function gui.refresh_hud(player)
     --
     -- CRITICAL: xN is the ON-TARGET count, not the roster. Only lances that
     -- ignite at the same point join one strike.
+    local owned = tostring(alpha.count(player.force))
+    local cap = tostring(C.capacity(player.force))
     if #rows > 1 then
       local aimed = math.min(on_target(rows), C.beam.convergence.max_lances)
       local draw = fmt_rate(turret.rate(entry.rec) * #rows)
       bar.caption = (aimed > 1)
         and {"oppenheimer.hud-battery-many", tostring(#rows),
-             tostring(aimed), draw}
+             tostring(aimed), draw, owned, cap}
         or {"oppenheimer.hud-battery-idle", tostring(#rows),
-            tostring(on_target(rows)), draw}
+            tostring(on_target(rows)), draw, owned, cap}
     else
-      bar.caption = {"oppenheimer.hud-battery-one"}
+      bar.caption = {"oppenheimer.hud-battery-one", owned, cap}
     end
   end
 
@@ -1229,7 +1234,7 @@ function gui.toggle_hud(player)
   if hidden then
     audio.notify(player, {"oppenheimer.hud-off"})
   elseif not (player.gui.screen[HUD] and player.gui.screen[HUD].valid) then
-    -- Shown, but there was nothing to show: no installation on this force.
+    -- Shown, but there was nothing to show: no installation on this surface.
     audio.notify(player, {"oppenheimer.hud-empty"})
   else
     audio.notify(player, {"oppenheimer.hud-on"})

@@ -193,22 +193,151 @@ local function count(surface, p, r, filter)
   return surface.count_entities_filtered(filter)
 end
 
+local CATEGORIES = {
+  {key = "nests", types = {"unit-spawner"}},
+  {key = "worms", types = {"turret"}},
+  {key = "units", types = {"unit", "spider-unit", "segmented-unit"},
+   parts = {"segment"}},
+}
+
+--- Every force this one is hostile to; "enemy" if it is at peace with all.
+local function hostile_forces(force)
+  local out = {}
+  for _, f in pairs(game.forces) do
+    if f ~= force and force.is_enemy(f) then out[#out + 1] = f.name end
+  end
+  if #out == 0 then out[1] = "enemy" end
+  return out
+end
+
+-- MapGenSize reads back as a number, or a preset name in some saves.
+local function gen_size(v)
+  if type(v) == "number" then return v end
+  return v == "none" and 0 or 1
+end
+
+local function enabled_setting(s)
+  return s ~= nil and gen_size(s.size) > 0 and gen_size(s.frequency) > 0
+end
+
+--- The enemies this surface's map generator places: every autoplaced spawner,
+--- every autoplaced worm, and every unit those spawners (or territories) field.
+local function native_roster(surface)
+  local mgs = surface.map_gen_settings or {}
+  local ent = mgs.autoplace_settings and mgs.autoplace_settings.entity
+  local listed = ent and ent.settings or {}
+  local by_default = not ent or ent.treat_missing_as_default ~= false
+  local controls = mgs.autoplace_controls or {}
+
+  local function placed(proto)
+    if listed[proto.name] then return enabled_setting(listed[proto.name]) end
+    if not by_default then return false end
+    local spec = proto.autoplace_specification
+    return spec ~= nil and spec.control ~= nil and enabled_setting(controls[spec.control])
+  end
+
+  local roster = {nests = {}, worms = {}, units = {}}
+  local seen = {}
+  local function add(list, name)
+    if name and not seen[name] and prototypes.entity[name] then
+      seen[name] = true
+      list[#list + 1] = name
+    end
+  end
+
+  for name, proto in pairs(prototypes.get_entity_filtered{{filter = "type", type = "unit-spawner"}}) do
+    if placed(proto) then
+      add(roster.nests, name)
+      for _, u in ipairs(proto.result_units or {}) do add(roster.units, u.unit) end
+    end
+  end
+  for name, proto in pairs(prototypes.get_entity_filtered{{filter = "type", type = "turret"}}) do
+    if placed(proto) then add(roster.worms, name) end
+  end
+  local territory = mgs.territory_settings
+  for _, u in ipairs(territory and territory.units or {}) do
+    add(roster.units, type(u) == "string" and u or u.name)
+  end
+  return roster
+end
+
+--- The segmented unit a segment belongs to, as key and name, or nil.
+local function owner_of(part)
+  local su = part.segmented_unit
+  if su and su.valid then return su.unit_number, su.prototype.name end
+  return nil
+end
+
+--- One category's hostiles in the blast, by name: natives in roster order, then
+--- intruders by name. A native category with nothing standing keeps its first
+--- icon at zero, so the line still says what this surface fields.
+--- A segment stands for its whole unit: ignored when that unit is already
+--- counted, otherwise the unit is counted once in its place.
+local function tally(s, p, hostiles, cat, lethal2, native)
+  local by, seen = {}, {}
+  local function count_one(name, key, q)
+    if key then
+      if seen[key] then return end
+      seen[key] = true
+    end
+    local t = by[name]
+    if not t then t = {name = name, l = 0, b = 0}; by[name] = t end
+    t.b = t.b + 1
+    if q then
+      local dx, dy = q.x - p.x, q.y - p.y
+      if dx * dx + dy * dy <= lethal2 then t.l = t.l + 1 end
+    end
+  end
+
+  local filter = {position = {p.x, p.y}, radius = p.radius, force = hostiles, type = cat.types}
+  for _, v in pairs(s.find_entities_filtered(filter)) do
+    if v.type == "segmented-unit" then
+      local su = v.segmented_unit
+      if su and su.valid then
+        count_one(su.prototype.name, su.unit_number, v.position)
+      else
+        count_one(v.name, v.unit_number, v.position)
+      end
+    else
+      count_one(v.name, v.unit_number, v.position)
+    end
+  end
+
+  if cat.parts then
+    filter.type = cat.parts
+    for _, part in pairs(s.find_entities_filtered(filter)) do
+      local key, name = owner_of(part)
+      -- Its body stands outside the blast, so it is never inside the kill radius.
+      if key and not seen[key] then count_one(name, key, nil) end
+    end
+  end
+
+  local out, done = {}, {}
+  for _, name in ipairs(native) do
+    if by[name] then out[#out + 1] = by[name]; done[name] = true end
+  end
+  local extra = {}
+  for name, t in pairs(by) do
+    if not done[name] then extra[#extra + 1] = t end
+  end
+  table.sort(extra, function(a, b) return a.name < b.name end)
+  for _, t in ipairs(extra) do out[#out + 1] = t end
+  if #out == 0 and native[1] then out[1] = {name = native[1], l = 0, b = 0} end
+  return out
+end
+
 --- What the shot will do, counted on the ground that now exists.
 local function survey(rec, p)
   local e = rec.entity
   local s = e.surface
   local lethal = p.radius * C.blast.rings.fireball_u
-  local enemy = "enemy"
-  p.survey = {
-    lethal_r    = lethal,
-    l_nests     = count(s, p, lethal,   {force = enemy, type = "unit-spawner"}),
-    l_worms     = count(s, p, lethal,   {force = enemy, type = "turret"}),
-    l_units     = count(s, p, lethal,   {force = enemy, type = {"unit", "spider-unit", "segmented-unit"}}),
-    b_nests     = count(s, p, p.radius, {force = enemy, type = "unit-spawner"}),
-    b_worms     = count(s, p, p.radius, {force = enemy, type = "turret"}),
-    b_units     = count(s, p, p.radius, {force = enemy, type = {"unit", "spider-unit", "segmented-unit"}}),
-    own         = count(s, p, p.radius, {force = e.force}),
-  }
+  local hostiles = hostile_forces(e.force)
+  local roster = native_roster(s)
+  local sv = {lethal_r = lethal, own = count(s, p, p.radius, {force = e.force})}
+  for _, cat in ipairs(CATEGORIES) do
+    sv[cat.key] = tally(s, p, hostiles, cat, lethal * lethal, roster[cat.key])
+  end
+  p.survey = sv
 end
 
 --- One tick of one preparation.
@@ -263,20 +392,50 @@ local function step(rec)
   end
 end
 
+-- Surveys saved before 0.51.1 hold one total per category and no names.
+local LEGACY_ICONS = {nests = "biter-spawner", worms = "medium-worm-turret", units = "medium-biter"}
+
+local function lists_of(sv)
+  if sv.nests then return sv end
+  local out = {}
+  for _, cat in ipairs(CATEGORIES) do
+    local k = cat.key
+    out[k] = {{name = LEGACY_ICONS[k], l = sv["l_" .. k] or 0, b = sv["b_" .. k] or 0}}
+  end
+  return out
+end
+
+-- A plain string, not a LocalisedString: a long roster can outgrow the 20-parameter limit.
+local function segment(lists, field)
+  local cats = {}
+  for _, cat in ipairs(CATEGORIES) do
+    local parts = {}
+    for _, t in ipairs(lists[cat.key]) do
+      if prototypes.entity[t.name] then
+        parts[#parts + 1] = "[entity=" .. t.name .. "]" .. t[field]
+      end
+    end
+    if #parts > 0 then cats[#cats + 1] = table.concat(parts, " ") end
+  end
+  return table.concat(cats, "   ")
+end
+
 --- The finished survey as a LocalisedString, for the panel and for chat.
 --- An empty zone takes the `<key>-clear` variant.
 function prepare.survey_line(key, p)
   local sv = p.survey
+  local lists = lists_of(sv)
   local blast = tostring(math.floor(p.radius + 0.5))
-  if sv.l_nests + sv.l_worms + sv.l_units
-     + sv.b_nests + sv.b_worms + sv.b_units + sv.own == 0 then
+  local total = sv.own
+  for _, cat in ipairs(CATEGORIES) do
+    for _, t in ipairs(lists[cat.key]) do total = total + t.b end
+  end
+  if total == 0 then
     return {"oppenheimer." .. key .. "-clear", blast}
   end
   return {"oppenheimer." .. key,
-          tostring(math.floor(sv.lethal_r + 0.5)),
-          tostring(sv.l_nests), tostring(sv.l_worms), tostring(sv.l_units),
-          blast,
-          tostring(sv.b_nests), tostring(sv.b_worms), tostring(sv.b_units),
+          tostring(math.floor(sv.lethal_r + 0.5)), segment(lists, "l"),
+          blast, segment(lists, "b"),
           tostring(sv.own)}
 end
 

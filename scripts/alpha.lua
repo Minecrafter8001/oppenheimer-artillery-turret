@@ -54,12 +54,17 @@ function alpha.count(force)
   return n
 end
 
-function alpha.order(force_index)
-  return (storage.alpha_order or {})[force_index]
+-- One pending order per battery, and a battery is a force on one surface.
+local function order_key(force, surface)
+  return force.index .. ":" .. surface.index
 end
 
-function alpha.drop(force_index)
-  if storage.alpha_order then storage.alpha_order[force_index] = nil end
+function alpha.order(force, surface)
+  return (storage.alpha_order or {})[order_key(force, surface)]
+end
+
+function alpha.drop(force, surface)
+  if storage.alpha_order then storage.alpha_order[order_key(force, surface)] = nil end
 end
 
 --- The live records behind an order, and how many are on target. A member that
@@ -114,12 +119,14 @@ function alpha.commit(player, recs, position)
   local units = {}
   for _, rec in ipairs(recs) do units[#units + 1] = rec.unit_number end
 
-  local ord = {units = units, x = position.x, y = position.y, tick = game.tick}
+  local surface = recs[1].entity.surface
+  local ord = {units = units, x = position.x, y = position.y, tick = game.tick,
+               force = player.force.index}
   local live, ready = alpha.resolve(ord)
   if #live == 0 then return false end
 
   if ready == #live then
-    alpha.drop(player.force.index)
+    alpha.drop(player.force, surface)
     local fired, handled = alpha.release(live)
     if fired > 0 then
       audio.notify(player.force, {"oppenheimer.alpha-fired", tostring(fired)})
@@ -128,7 +135,7 @@ function alpha.commit(player, recs, position)
   end
 
   storage.alpha_order = storage.alpha_order or {}
-  storage.alpha_order[player.force.index] = ord
+  storage.alpha_order[order_key(player.force, surface)] = ord
   audio.notify(player, {"oppenheimer.alpha-committed",
                tostring(ready), tostring(#live)})
   return true
@@ -168,15 +175,16 @@ function alpha.tick()
   local orders = storage.alpha_order
   if not orders or next(orders) == nil then return end
 
-  for fidx, ord in pairs(orders) do
-    local force = game.forces[fidx]
+  for key, ord in pairs(orders) do
+    -- Orders saved before 0.51.1 are keyed by force index and carry no ord.force.
+    local force = game.forces[ord.force or key]
     local live, ready = alpha.resolve(ord)
 
     if #live == 0 then
-      orders[fidx] = nil
+      orders[key] = nil
       if force then audio.notify(force, {"oppenheimer.alpha-lapsed"}) end
     elseif ready == #live then
-      orders[fidx] = nil
+      orders[key] = nil
       local fired = alpha.release(live)
       if fired > 0 and force then
         audio.notify(force, {"oppenheimer.alpha-fired", tostring(fired)})
@@ -184,7 +192,7 @@ function alpha.tick()
     elseif game.tick - ord.tick > C.turret.alpha_hold_ticks then
       -- A barrel that never arrives must not hold the battery hostage: fire
       -- what IS on target rather than leaving the order pending forever.
-      orders[fidx] = nil
+      orders[key] = nil
       local on = {}
       for _, rec in ipairs(live) do
         if turret.aimed(rec) then on[#on + 1] = rec end
