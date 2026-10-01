@@ -1,0 +1,345 @@
+Version: 0.51.0
+Date: 2026-09-23
+  Info:
+    - Factorio 2.1 support. Factorio 2.1 needs its own release of this mod,
+      published alongside the 2.0 one. Both are built from the same code.
+  Gui:
+    - The dial's tooltip now follows your battery: it lists the top of the
+      dial for the installations standing, for what Capacity research allows
+      now, and for the full battery, and updates as you build and research.
+    - Every rung on the dial now carries a real-world comparison: the device
+      it matches (MOAB, Little Boy, Fat Man, B83, B53, Castle Bravo, Tsar
+      Bomba), or a multiple of the biggest device it exceeds.
+    - The battery tag on each rung now reads xN YIELD.
+  Balancing:
+    - Oppenheimer Lance research now requires Artillery and Atomic bomb and
+      costs 6000 units of six science packs.
+    - With Space Age it instead requires Artillery and Electromagnetic science
+      and costs 4000 units of eight science packs, including space,
+      metallurgic and electromagnetic.
+    - With Space Age the gun is built from tungsten plate and refined
+      concrete, and each capacitor bank takes 5 supercapacitors.
+    - Installation Capacity research grows by 2000 units per level instead of
+      doubling each level.
+  Bugfixes:
+    - Fixed Space Age lightning failing to load on Factorio 2.1.
+---------------------------------------------------------------------------------------------------
+Version: 0.50.1
+Date: 2026-09-23
+  Bugfixes:
+    - A grid that lost power mid-charge no longer finished the spin-up
+      anyway. A real outage now aborts the charge.
+    - ZONE NOT PREPARED no longer shows unless needed.
+    - Corpses don't re-paint when zooming in anymore.
+---------------------------------------------------------------------------------------------------
+Version: 0.50.0
+Date: 2026-09-20
+  Info:
+    - BIGGEST UPDATE SINCE LAUNCH. Everything since 0.44.0 in one release:
+      rebuilt HUD, real blast physics, six times the dial range, a crater
+      that caps while extra power feeds the beam, installations that
+      strike together, permanent craters, a new shock wave. PERFORMANCE
+      at least 100x better.
+  Major Features:
+    - NEW HUD. Rebuilt fire-control panel: three lines per installation,
+      red/green toggles for LIVE, LASER SWEEP and LOCK. Charge readout
+      shows percent and megawatts, plus a live 15 second grid-draw graph
+      -- a sagging line means the grid can't hold the rate.
+    - DIAL LABELLED BY POWER: 360 MW to 36 GW, a standard shot to a 2000
+      tile crater. Each rung shows power, crater radius, yield, OP factor
+      past FULL.
+    - BATTERY IS THE BIG GUN. Every installation you own fires into the
+      same crater up to 10 guns.
+    - REAL DAMAGE PHYSICS. Now depends on blast overpressure and
+      thermal radiation against published lethality thresholds -- no more
+      hand-picked damage number. The whole crater is lethal at every
+      yield; hardened nests used to survive a third of the way out. Dial
+      low for pure concussion, dial full to burn the whole disc.
+    - NEW SHOCK WAVE: a real wall of glowing gas, not sprite rings.
+      Blue-white at the fireball, cooling to ember red, breaking into a
+      lumpy front, dragging a dust wave and lighting what it crosses. The
+      detonation gets its own fireball art, sized and coloured to its
+      temperature.
+    - TEST/LIVE split. TEST surveys the blast zone and never fires. LIVE
+      fires on one CONFIRM and warns if the zone was never surveyed.
+    - CHARGE WINDOW COMPRESSES. A grid that fills banks faster cuts the
+      16 second spin-up to 12, 8, or 4 seconds, vent included. Stalled
+      orders still pay the full vent.
+    - LIGHTNING. Real strikes off the sphere's rim, not a constant fizz:
+      fewer, random, all lethal. Size 2-10 -- bigger strikes reach
+      further, branch more, chain more, hit harder, and come more often
+      late in the burn and on overpowered shots. Space Age draws it with
+      tesla-turret arcs and Fulgora storm art, sky bolts on the biggest
+      strikes; without SA the mod draws its own.
+  Features:
+    - Lance thickens past FULL to 2.6x standard width, vaporize lane with
+      it. Laser sweep span grows to 2.2x the drawn line, denser fire wall.
+    - Channel heats past FULL's colour cap, then blooms white and
+      additive -- a hole in the scene, not a beam.
+    - Panel tracks the grid survey live, then the window it earned and
+      the draw it'll cost.
+  Graphics:
+    - Lance colour tracks temperature: red to white to blue-white at full
+      power. Capacitor arcs match; banks glow with waste heat as charge
+      climbs.
+    - CRATER COOLS LIKE ROCK. Molten glaze crusts in ~20 seconds, stays
+      molten for minutes, glows up to half an hour on the biggest shots,
+      dark from the edge in. Ground outside the fireball is cold in
+      seconds. Fire burns where rock's still hot; crater lights the night.
+    - Permanent scars: crater, rim, fused rock, scorched ground to the
+      edge. Lakes survive -- only shallow water under the fireball boils
+      off, nothing turns to lava on water.
+    - Trees and rocks under the charging sphere vaporize outright; so
+      does anything under the molten glaze -- no floating corpses or loot.
+    - Fire ring matches the wave's colours and grows with shot size.
+    - Removed the infall streaks around the sphere and its collapse.
+  Sounds:
+    - NEW FIRING SOUND, one continuous mix: spin-up, burn, detonation.
+      Beam now 11.1 seconds instead of 5.7; whole event ~26 seconds. Burn
+      no longer skips -- one unbroken recording, not three stitched
+      pieces. New detonation sound, 15.5 seconds, timed to hit with the
+      blast.
+    - Lightning gets real thunder: nine recordings by strike size, crack
+      to 25 second roll, timed to the flash, sitting under the beam not
+      over it.
+    - Firing sequence now audible along the whole line of fire, not just
+      at the gun -- watching your target land no longer goes silent for
+      the charge and burn.
+    - Standby hum no longer skips at its fade points. Spin-up's twelve
+      pieces no longer dip at their joins. No gap between charge end and
+      strike. Wind-down runs half a second shorter, no stray low hit at
+      cutoff.
+    - Sphere condense time nearly doubled. Charge is a fifth of a second
+      shorter, energy and crater down about one percent to match.
+    - Installation has its own UI sounds: soft click for panel buttons,
+      heavier tone for fire, one quiet voice for messages instead of chat
+      pings -- no more spam from a run of presses or a profile report.
+  Changes:
+    - Messages, tooltips and item descriptions rewritten shorter; colour
+      marks severity instead of decorating every line. Charge panel and
+      turret description explain the four stages: charge, beam, collapse,
+      detonation.
+  Balancing:
+    - VENTING IS THE WIND-DOWN. Recovery was a flat 60 seconds; now it's
+      exactly the 15 second wind-down sound.
+    - RESEARCH IS NOW CAPACITY. Targeting Range and Payload are gone --
+      every installation reaches 10,000 tiles and full 36 GW on unlock.
+      Oppenheimer Installation Capacity adds one installation slot per
+      level, nine levels, up to ten; one is free before research. Damage
+      no longer scales with research at all.
+  Optimizations:
+    - NO STUTTERS. Each lance used to re-search its
+      whole beam ten times a second for eleven seconds, all guns at once.
+      The lane can't change once swept, so it's swept once, then just
+      watched. Search boxes now match beam width instead of a fixed size
+      that scanned wide shots six times over.
+    - Lance built from short beam spans, only the ones on screen exist. A
+      full-length beam used to stall the game up to a fifth of a second
+      on light/colour/cut updates; now it's a small shared per-tick
+      budget. Charging channel and installation effects are also
+      screen-gated.
+    - Trees and rocks in the lance's path vaporize outright -- no stumps,
+      no debris storm. Bodies outside the crater are remembered, not kept
+      ticking, and built only when you walk out to them.
+    - A wide shot only builds the inner 2000 tiles up front, not the
+      whole blast zone -- keeps a full-dial shot affordable.
+  Bugfixes:
+    - Arc sweep drawn right to left now sweeps right to left.
+    - Charge rate help, fire button help, and item description printed
+      __1__ and __2__ instead of numbers.
+    - Venting smoke now matches vent duration exactly.
+    - Shock front no longer thins to a dotted line at top speed, or
+      spends most of its life invisible. Wall no longer double-paints its
+      texture; dust ahead fades out instead of cutting hard.
+    - Mining an installation mid-shot now kills its lance instead of
+      letting the beam expire on its own.
+---------------------------------------------------------------------------------------------------
+Version: 0.44.0
+Date: 2026-09-16
+  Major Features:
+    - Arc sweep: an on/off toggle in the fire-control panel. With it on, drag the lance designator across the installation to mark a span, then confirm from the panel to fire -- the barrel hyper-rotates across that span in one motion, vaporizing everything it crosses and laying a wall of fire along the drawn line until it burns out. A separate capability from the firing sequence, sharing its lance and reach but no energy sphere or detonation, limited by a cooldown instead of energy cost.
+    - Two-stage confirm on the firing sequence: the first CONFIRM prepares and surveys the blast zone (nests, worms, enemies, and your own entities inside it); the next CONFIRM fires. A TEST/LIVE toggle lets you prepare and survey without ever firing. This should cut down on the generation lag considerably.
+  Graphics:
+    - The lance and energy sphere now glow at their real temperature as they charge, from red-orange through white to blue-white on the largest shots.
+    - Rebuilt the charge-up ionization effect into a shimmering, beam-shaped channel that pinches down to the strike, igniting the lance out of a bright flash instead of cutting abruptly.
+    - The blast wave now trails a fast sheet of fire along its leading edge, and the scorched ground leads the fire ring instead of trailing it.
+    - The charging sphere burns the forest beneath it: trees in the fireball are vaporized, the rest are left as bare charred trunks, and the shock wave knocks trunks down with flying debris as it passes.
+    - Water inside the blast's scorched core now turns to lava (requires Space Age).
+  Optimizations:
+    - Large forest blasts no longer tank the framerate: trees and rocks no longer burst into thousands of particles, and the shock wave's search skips things it can never damage.
+    - Scorched ground now covers only the blast's heavy-damage core, roughly a tenth of the tiles on large shots, with faster per-row water checks.
+    - Biters and creatures killed out of every player's view are removed quietly, without gore or a death explosion; anything dying in view still gets its full animation, and enemy gore in general is now capped to within 200 tiles of a player.
+    - The charging sphere no longer forces unexplored ground to generate while it grows.
+  Bugfixes:
+    - The scorch no longer paves over lakes and oceans, and the charging sphere's electric arcs now reliably strike biters at every yield.
+    - Fixed a crash that could hit the fire-control HUD a few seconds after loading a save with an arc sweep toggle off, and fixed the ionization haze rendering as a solid white panel.
+    - Arc sweep no longer leaves enemies alive between beam updates, its barrel now visibly turns with the beam, its reach matches your researched range, and its sound now starts a moment later so it doesn't include the charge-up.
+    - Capacitor banks facing the target no longer ran empty early while the ones behind stayed charged; all banks now empty together, target-facing ones still draining first.
+---------------------------------------------------------------------------------------------------
+Version: 0.43.0
+Date: 2026-09-15
+  Features:
+    - Holding the Oppenheimer Lance now previews the whole 55x55 installation around the cursor: the pad, all 32 capacitor bank slots, the substations, lamps and the gun, so you can see where it fits before placing it.
+  Bugfixes:
+    - During a shot, the banks facing the target ran empty early while the banks behind finished still charged. All banks now empty by the time the beam cuts; the ones facing the target still drain first.
+---------------------------------------------------------------------------------------------------
+Version: 0.42.0
+Date: 2026-09-15
+  Info:
+    - Collects every change since 0.31.0 into one release.
+    - Now licensed under the MIT License.
+  Major Features:
+    - Oppenheimer Lance Targeting Range unlocks bigger shots: 25% unresearched, up to 100% at level 5. Designation reach grows with it, from 962 to 3300 tiles, so every shot on the dial has ground far enough out to land on.
+    - Oppenheimer Lance Cycling shortens the vent after a shot by 25% per level, instant at level 4.
+  Balancing:
+    - Capacitor banks: 36 -> 32, eight per cluster; each cluster's Lance Substation now stands in its centre cell.
+    - The lance is 50% wider, and its width and cutting path follow the charge actually delivered.
+    - Anyone standing in the beam is vaporized, whatever their force.
+    - The sphere's electric arcs strike only biters, spitters, vehicles and characters; nests and worms are left to the blast.
+    - Maximum charge is 100%.
+  Graphics:
+    - The lance is red.
+    - New hand-designed 55x55 foundation pad: walkways, hazard-concrete bank pads and a refined-concrete field.
+    - Technology, turret and cell icons use the laser-turret art the turret is built on.
+  Sounds:
+    - Aborting mid-charge cuts the charge sound off within a few seconds.
+    - The strike sound is as loud as where you are standing when it fires, not where you were when you confirmed.
+    - The lance stops burning as the strike sound goes quiet.
+    - Charge sound is louder.
+  Bugfixes:
+    - A full-charge shot could never be fired, even fully researched.
+    - Cycling and Targeting Range counted one more level than had been researched.
+    - Biters could survive a detonation by walking, or being spawned, into ground the blast had already passed.
+    - Substation and lamp tooltips had the status lights backwards.
+    - The Cycling tooltip showed an internal note.
+  Changes:
+    - Yield-selector rows above your research show as locked, naming the level that opens them. Each row reads power, trigger energy, yield, crater and percent.
+    - Charge rates are shown in GW and MW.
+    - /oppenheimer-status reports the research cap and reach.
+    - Removed the detonation damage multiplier startup setting.
+    - Removed developer notes and unused sound files from the mod package.
+  Locale:
+    - "Oppenheimer Artillery" is now "Oppenheimer Lance" everywhere; leftover artillery and shell wording removed.
+    - Corrected tooltips that described the old short-falling shot and the old substation positions.
+---------------------------------------------------------------------------------------------------
+Version: 0.31.0
+Date: 2026-09-14
+  Balancing:
+    - Capacitor banks: 16 -> 36, in 3x3 corner clusters. Installations must now stand 56 tiles apart.
+  Graphics:
+    - The firing ring is hazard concrete again.
+---------------------------------------------------------------------------------------------------
+Version: 0.30.0
+Date: 2026-09-14
+  Graphics:
+    - The charging and collapsing sphere is smoother and casts real light.
+---------------------------------------------------------------------------------------------------
+Version: 0.29.0
+Date: 2026-09-14
+  Graphics:
+    - The pad is a squared-off hardstand instead of a tiled circle, with runway-style lamps.
+  Balancing:
+    - Removed the Buffered Capacitor and Fuel Cell bank tiers -- only the standard bank remains.
+---------------------------------------------------------------------------------------------------
+Version: 0.28.2
+Date: 2026-09-14
+  Bugfixes:
+    - A total power cut mid-charge still fired the gun at zero charge; it now reports a misfire instead.
+---------------------------------------------------------------------------------------------------
+Version: 0.28.0
+Date: 2026-09-14
+  Features:
+    - Capacitor arcs while charging, a brownout flash on the strike, an ignition dust ring, and barrel venting after a shot.
+    - The charging and collapsing sphere is now shaded like a real sphere.
+  Bugfixes:
+    - Ground lamps clipped the capacitor banks; contact explosions were playing hidden under the sphere.
+---------------------------------------------------------------------------------------------------
+Version: 0.27.0
+Date: 2026-09-14
+  Features:
+    - The pad now builds itself in a visible sequence, with a commissioning light-up and a full firing lighting show -- aim line, chase bulbs, strike flash, scorch marks.
+---------------------------------------------------------------------------------------------------
+Version: 0.26.4
+Date: 2026-09-14
+  Bugfixes:
+    - The standby hum had an audible gap every loop; it now loops natively.
+---------------------------------------------------------------------------------------------------
+Version: 0.26.3
+Date: 2026-09-14
+  Bugfixes:
+    - Fixed a duplicated, misaligned turret head sprite.
+---------------------------------------------------------------------------------------------------
+Version: 0.26.2
+Date: 2026-09-14
+  Balancing:
+    - The beam now leaves from the barrel's tip.
+---------------------------------------------------------------------------------------------------
+Version: 0.26.1
+Date: 2026-09-14
+  Bugfixes:
+    - The barrel did not turn.
+---------------------------------------------------------------------------------------------------
+Version: 0.26.0
+Date: 2026-09-14
+  Changes:
+    - The rotating barrel is now drawn by script instead of relying on the entity's own animation.
+---------------------------------------------------------------------------------------------------
+Version: 0.25.0
+Date: 2026-09-13
+  Changes:
+    - Status lights moved onto the real ground lamps. "Ready to fire" is now its own solid amber, and the lit beam holds steady instead of flashing.
+  Bugfixes:
+    - Ground lamps stayed dark in daylight; per-bank lamps clipped their own capacitor banks.
+---------------------------------------------------------------------------------------------------
+Version: 0.24.0
+Date: 2026-09-13
+  Features:
+    - A real lamp at every capacitor bank.
+  Bugfixes:
+    - Finished the chassis swap to laser-turret art (base sprite, death effects); re-anchored barrel glow and arc effects.
+---------------------------------------------------------------------------------------------------
+Version: 0.23.1
+Date: 2026-09-13
+  Bugfixes:
+    - Fixed a massive UPS stall when firing a 100% charge shot.
+---------------------------------------------------------------------------------------------------
+Version: 0.23.0
+Date: 2026-09-13
+  Major Features:
+    - The turret is now built on the laser turret instead of the artillery turret.
+---------------------------------------------------------------------------------------------------
+Version: 0.22.0
+Date: 2026-09-13
+  Features:
+    - Status lights gained an aligning/ready sub-state; capacitor charge glow flickers; new barrel glow and arc effects; ground lamps added.
+  Bugfixes:
+    - The detonation's boom landed about a second late.
+---------------------------------------------------------------------------------------------------
+Version: 0.21.1
+Date: 2026-09-13
+  Bugfixes:
+    - A second, stale copy of the old boom sound was still playing near the blast.
+---------------------------------------------------------------------------------------------------
+Version: 0.21.0
+Date: 2026-09-13
+  Features:
+    - The blast-radius preview now warns when nearby terrain isn't generated yet.
+  Bugfixes:
+    - The detonation's boom was too short for a large blast; the blast-radius preview never appeared on the map; terrain now generates starting at designation instead of only at confirm.
+---------------------------------------------------------------------------------------------------
+Version: 0.20.2
+Date: 2026-09-10
+  Bugfixes:
+    - Confirming a shot could drop the game to 5 FPS for the whole sequence; generation requests are now capped.
+---------------------------------------------------------------------------------------------------
+Version: 0.20.1
+Date: 2026-09-10
+  Bugfixes:
+    - The blast could leave whole enemy nests undamaged inside the crater on ungenerated ground.
+---------------------------------------------------------------------------------------------------
+Version: 0.20.0
+Date: 2026-09-10
+  Major Features:
+    - Rebalanced the yield dial to 1%-100% = up to 2000 tiles. The shock wave now travels slowly and realistically, and damage follows real overpressure falloff, absolute rather than a percentage of health.
+  Optimizations:
+    - Major performance fixes to the blast's growth and sweep phases.
