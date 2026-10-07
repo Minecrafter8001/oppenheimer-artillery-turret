@@ -291,7 +291,7 @@ local function scar_tile()
   if want and data and data.raw and data.raw.tile and data.raw.tile[want] then
     return want
   end
-  return N.base.nuclear_ground
+  return N.tiles.nuclear_ground
 end
 
 blast.scar_tile = scar_tile

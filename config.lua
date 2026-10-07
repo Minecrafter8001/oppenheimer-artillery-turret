@@ -1117,15 +1117,15 @@ C.blast = {
 
       -- The cold floor, inside out: each tile covers ground whose peak temperature (C.blast.rings.groundfire.kelvin) reached `kelvin` K; the last reaches the ring. Used only when every tile exists.
       ladder = {
-        {tile = N.base.volcanic_cracks,       kelvin = 1200},
-        {tile = N.base.volcanic_smooth_stone, kelvin = 1000},
-        {tile = N.base.volcanic_folds,        kelvin = 0},
+        {tile = N.tiles.volcanic_cracks,       kelvin = 1200},
+        {tile = N.tiles.volcanic_smooth_stone, kelvin = 1000},
+        {tile = N.tiles.volcanic_folds,        kelvin = 0},
       },
       -- The glaze under the fireball ring, hottest first, each tile held until the C.heat.ground.cooling event named by `ends`: crust (the surface falls below t_melt), solid (the whole layer has frozen), dark (the surface falls below the Draper point). It then cools into the floor or the crater beneath it.
       glaze = {
-        {tile = N.base.lava,                 ends = "crust"},
-        {tile = N.base.volcanic_cracks_hot,  ends = "solid"},
-        {tile = N.base.volcanic_cracks_warm, ends = "dark"},
+        {tile = N.tiles.lava,                 ends = "crust"},
+        {tile = N.tiles.volcanic_cracks_hot,  ends = "solid"},
+        {tile = N.tiles.volcanic_cracks_warm, ends = "dark"},
       },
       -- The crater the burst digs at ground zero (Glasstone and Dolan, The Effects of Nuclear Weapons, 6.09 and 6.71): apparent radius radius_m at 1 kt in dry soil, every dimension scaling as yield ^ exponent, the lip's crest at `lip` times the radius.
       crater = {
@@ -1133,8 +1133,8 @@ C.blast = {
         radius_m = 18.3,
         exponent = 0.3,
         lip      = 1.25,
-        floor    = N.base.nuclear_ground,
-        rim      = N.base.volcanic_jagged_ground,
+        floor    = N.tiles.nuclear_ground,
+        rim      = N.tiles.volcanic_jagged_ground,
       },
 
       -- Every class edge is r x (1 + amplitude x sum(cos(m theta + phase (j + 1)) / j) / norm), one per-shot phase for all edges.
@@ -1608,7 +1608,7 @@ C.blast.scar.cliff_fraction      = 0.85
 C.blast.scar.instant = false
 
 -- The crater surface: Space Age's Vulcanus terrain (cracked black volcanic rock). Optional: lib/blast.lua checks data.raw and falls back to nuclear-ground without Space Age, because a set-tile naming a missing tile is a hard load error. Alternatives in the same set: volcanic-folds-flat, volcanic-cracks, volcanic-ash-dark.
-C.blast.scar.tile_name = N.base.volcanic_folds
+C.blast.scar.tile_name = N.tiles.volcanic_folds
 
 C.render = {
   -- The power run: a conduit ring on the concrete plus one short spur per pylon.

@@ -4,6 +4,7 @@ require("prototypes.ammo-category")
 require("prototypes.sound")
 require("prototypes.shortcut")
 require("prototypes.style")
+require("prototypes.tiles")
 
 require("prototypes.vfx.explosions")
 require("prototypes.vfx.smoke")

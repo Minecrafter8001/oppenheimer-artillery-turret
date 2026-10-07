@@ -45,6 +45,15 @@ local NOW_TICK, NOW = -1, {}
 -- Per-tile tables handed to set_tiles, reused: set_tiles copies them before returning.
 local POOL = {}
 
+local function on_nauvis(surface)
+  local planet = surface.planet
+  return (planet and planet.name == "nauvis") or (not planet and surface.name == "nauvis")
+end
+
+local function surface_tile(surface, name)
+  return on_nauvis(surface) and N.nauvis_tiles[name] or name
+end
+
 local function near_chunk(x, y, ci, cj)
   local lx, ly = ci * CHUNK, cj * CHUNK
   local dx, dy = 0, 0
@@ -84,7 +93,8 @@ end
 
 --- Whether a tile holds the molten fluid (lava).
 function crater.molten(name)
-  return molten()[name] == true
+  return name == N.tiles.lava or name == N.nauvis_tiles[N.tiles.lava]
+         or molten()[name] == true
 end
 
 --- Whether a liquid tile is shallow enough for the fireball to boil dry.
@@ -147,7 +157,7 @@ local function ladder(key)
     end
   else
     local t = C.blast.scar.tile_name
-    if not (t and prototypes.tile[t]) then t = N.base.nuclear_ground end
+    if not (t and prototypes.tile[t]) then t = N.tiles.nuclear_ground end
     steps, u_lim = {{tile = t, kelvin = 0}}, pc.radius_fraction_base
   end
   lad = {u = u_lim, cold = {}, glaze = glaze, ev = {}}
@@ -178,7 +188,7 @@ end
 local function tile_at(cr, lad, c, m)
   if c and m <= C.blast.rings.fireball_u then
     for i, st in ipairs(lad.glaze) do
-      if m <= (c[i] or 0) then return st.tile end
+      if (c[i] or 0) > 0 and m <= c[i] then return st.tile end
     end
   end
   if cr.u_bowl then
@@ -359,7 +369,7 @@ local function paint_band(surface, cr, maps, cls, r0, r1, y_lo, y_hi, x_lo, x_hi
   local pc  = C.blast.rings.paint
   local K   = #cls
   local cx, cy, R = cr.x, cr.y, cr.radius
-  local r0sq, r1sq = r0 * r0, r1 * r1
+  local r0sq, r1sq = r0 > 0 and r0 * r0 or -1, r1 * r1
   local base2, edge2 = {}, {}
   for k = 1, K do
     local e = cls[k].u * R
@@ -446,11 +456,11 @@ local function paint_band(surface, cr, maps, cls, r0, r1, y_lo, y_hi, x_lo, x_hi
                     n = n + 1
                     local t = POOL[n]
                     if t then
-                      t.name = cl.tile
+                      t.name = surface_tile(surface, cl.tile)
                       local pp = t.position
                       pp[1], pp[2] = xx, y
                     else
-                      t = {name = cl.tile, position = {xx, y}}
+                      t = {name = surface_tile(surface, cl.tile), position = {xx, y}}
                       POOL[n] = t
                     end
                     tiles[n] = t
@@ -658,11 +668,12 @@ local function cool_band(surface, cr, cur, lo, hi, ph)
                   local d2 = xc * xc + dy2
                   local v = sin(xx * 12.9898 + yh) * 43758.5453
                   local de2 = d2 + dk * sqrt(d2) * (2 * (v - floor(v)) - 1)
-                  if de2 > blo and de2 <= bhi then
+                  if (lo <= 0 or de2 > blo) and de2 <= bhi then
                     local k = 1
                     while k <= K and de2 > ce2[k] do k = k + 1 end
-                    if k <= K and writable(map, xx - ci * CHUNK, ry, cur[k]) then
-                      local name = cur[k].tile
+                    if k <= K and writable(map, xx - ci * CHUNK, ry, cur[k])
+                       and N.tile_sources[surface.get_tile(xx, y).name] then
+                      local name = surface_tile(surface, cur[k].tile)
                       n = n + 1
                       local t = POOL[n]
                       if t then
@@ -914,11 +925,10 @@ function crater.step(sw, surface, r, elapsed)
   if sw.groundfire then sw.groundfire.paint_r = sw.paint_r end
 end
 
---- The sweep is over: keep only what crater.replay and the cooling read. A crater left half painted stops cooling.
+--- The sweep is over: keep what crater.replay and cooling read, including unfinished glaze.
 function crater.finish(sw)
   local cr = sw.crater
   if not cr then return end
-  if not crater.painted(sw) then cr.cooling = nil end
   cr.up, cr.dn = cr.lmax, cr.lmax
   cr.clear_r = cr.clim
   cr.vap_r = cr.lava_r

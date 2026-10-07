@@ -1,3 +1,16 @@
+Version: 0.2.0
+Date: 2026-10-07
+  Features:
+    - Blast terrain now uses owned tile copies, with separate Nauvis variants.
+    - Zen Garden and Early Agriculture artificial grass can cover cooled blast
+      terrain on Nauvis. Lava and hot glaze remain unavailable for reclamation.
+  Bugfixes:
+    - Blast-created lava no longer supplies fluid to offshore pumps. Natural
+      lava is unchanged.
+    - Final cooling includes exact-center and negatively dithered center tiles.
+    - Incomplete paint sweeps keep cooling their owned terrain rather than
+      abandoning molten ground. Cooling preserves player grass and paving.
+---------------------------------------------------------------------------------------------------
 Version: 0.51.1
 Date: 2026-10-01
   Gui:

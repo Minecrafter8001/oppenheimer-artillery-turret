@@ -275,4 +275,23 @@ N.base = {
   nuke_explosion      = "nuke-explosion",
 }
 
+N.tiles = {}
+N.tile_sources = {}
+N.nauvis_tiles = {}
+N.hot_tiles = {}
+for _, key in ipairs({"lava", "volcanic_cracks_hot", "volcanic_cracks_warm",
+                      "volcanic_cracks", "volcanic_smooth_stone", "volcanic_folds",
+                      "nuclear_ground", "volcanic_jagged_ground"}) do
+  local source = N.base[key]
+  local owned = n(source)
+  local nauvis = n("nauvis-" .. source)
+  N.tiles[key] = owned
+  N.tile_sources[owned] = source
+  N.tile_sources[nauvis] = source
+  N.nauvis_tiles[owned] = nauvis
+  if key == "lava" or key == "volcanic_cracks_hot" or key == "volcanic_cracks_warm" then
+    N.hot_tiles[owned], N.hot_tiles[nauvis] = true, true
+  end
+end
+
 return N
