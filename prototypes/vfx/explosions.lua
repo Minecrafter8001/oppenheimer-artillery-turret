@@ -348,7 +348,7 @@ data:extend({
     sound = {
       aggregation = {max_count = 1, remove = true},
       variations = {
-        {filename = "__oppenheimer-artillery-turret__/sound/ImplosionBoom.ogg",
+        {filename = "__oppenheimer-artillery-turret-forked__/sound/ImplosionBoom.ogg",
          volume = C.sound.boom_volume_floor},
       },
       audible_distance_modifier = C.blast.sound.far_distance_modifier,

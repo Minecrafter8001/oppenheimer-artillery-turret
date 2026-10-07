@@ -31,7 +31,7 @@ local ui = C.sound.ui
 
 --- A style's click voice: one file from sound/, at the panel's button volume.
 local function voice(file)
-  return {{filename = "__oppenheimer-artillery-turret__/sound/" .. file, volume = ui.button_volume}}
+  return {{filename = "__oppenheimer-artillery-turret-forked__/sound/" .. file, volume = ui.button_volume}}
 end
 
 --- A compact button over one of core's, with the mod's own click.

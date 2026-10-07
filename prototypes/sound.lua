@@ -24,7 +24,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.charge[1],
-    filename = "__oppenheimer-artillery-turret__/sound/BeamCharge01.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/BeamCharge01.ogg",
     volume = s.charge_volume,
     audible_distance_modifier = s.charge_distance,
     category = "weapon",
@@ -32,7 +32,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.charge[2],
-    filename = "__oppenheimer-artillery-turret__/sound/BeamCharge02.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/BeamCharge02.ogg",
     volume = s.charge_volume,
     audible_distance_modifier = s.charge_distance,
     category = "weapon",
@@ -40,7 +40,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.charge[3],
-    filename = "__oppenheimer-artillery-turret__/sound/BeamCharge03.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/BeamCharge03.ogg",
     volume = s.charge_volume,
     audible_distance_modifier = s.charge_distance,
     category = "weapon",
@@ -48,7 +48,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.charge[4],
-    filename = "__oppenheimer-artillery-turret__/sound/BeamCharge04.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/BeamCharge04.ogg",
     volume = s.charge_volume,
     audible_distance_modifier = s.charge_distance,
     category = "weapon",
@@ -56,7 +56,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.charge[5],
-    filename = "__oppenheimer-artillery-turret__/sound/BeamCharge05.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/BeamCharge05.ogg",
     volume = s.charge_volume,
     audible_distance_modifier = s.charge_distance,
     category = "weapon",
@@ -64,7 +64,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.charge[6],
-    filename = "__oppenheimer-artillery-turret__/sound/BeamCharge06.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/BeamCharge06.ogg",
     volume = s.charge_volume,
     audible_distance_modifier = s.charge_distance,
     category = "weapon",
@@ -72,7 +72,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.charge[7],
-    filename = "__oppenheimer-artillery-turret__/sound/BeamCharge07.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/BeamCharge07.ogg",
     volume = s.charge_volume,
     audible_distance_modifier = s.charge_distance,
     category = "weapon",
@@ -80,7 +80,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.charge[8],
-    filename = "__oppenheimer-artillery-turret__/sound/BeamCharge08.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/BeamCharge08.ogg",
     volume = s.charge_volume,
     audible_distance_modifier = s.charge_distance,
     category = "weapon",
@@ -88,7 +88,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.charge[9],
-    filename = "__oppenheimer-artillery-turret__/sound/BeamCharge09.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/BeamCharge09.ogg",
     volume = s.charge_volume,
     audible_distance_modifier = s.charge_distance,
     category = "weapon",
@@ -96,7 +96,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.charge[10],
-    filename = "__oppenheimer-artillery-turret__/sound/BeamCharge10.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/BeamCharge10.ogg",
     volume = s.charge_volume,
     audible_distance_modifier = s.charge_distance,
     category = "weapon",
@@ -104,7 +104,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.charge[11],
-    filename = "__oppenheimer-artillery-turret__/sound/BeamCharge11.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/BeamCharge11.ogg",
     volume = s.charge_volume,
     audible_distance_modifier = s.charge_distance,
     category = "weapon",
@@ -112,7 +112,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.charge[12],
-    filename = "__oppenheimer-artillery-turret__/sound/BeamCharge12.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/BeamCharge12.ogg",
     volume = s.charge_volume,
     audible_distance_modifier = s.charge_distance,
     category = "weapon",
@@ -129,7 +129,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.strike,
-    filename = "__oppenheimer-artillery-turret__/sound/BeamStrike.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/BeamStrike.ogg",
     volume = s.strike_volume,
     audible_distance_modifier = s.strike_distance,
     category = "weapon",
@@ -142,7 +142,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.spindown,
-    filename = "__oppenheimer-artillery-turret__/sound/BeamSpindown.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/BeamSpindown.ogg",
     volume = s.spindown_volume,
     audible_distance_modifier = s.spindown_distance,
     category = "weapon",
@@ -181,7 +181,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.boom,
-    filename = "__oppenheimer-artillery-turret__/sound/ImplosionBoom.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/ImplosionBoom.ogg",
     volume = s.boom_volume,
     -- s.fire_distance (6) rather than C.blast.sound.far_distance_modifier (8),
     -- and the difference matters for a reason that is documented in this file's
@@ -239,7 +239,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.arc_sweep,
-    filename = "__oppenheimer-artillery-turret__/sound/ArcSweep.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/ArcSweep.ogg",
     volume = s.strike_volume,
     audible_distance_modifier = s.strike_distance,
     category = "weapon",
@@ -250,7 +250,7 @@ data:extend({
   {
     type = "sound",
     name = N.sound.arc_sweep_charge,
-    filename = "__oppenheimer-artillery-turret__/sound/ArcSweepCharge.ogg",
+    filename = "__oppenheimer-artillery-turret-forked__/sound/ArcSweepCharge.ogg",
     volume = s.charge_volume,
     audible_distance_modifier = s.charge_distance,
     category = "weapon",
@@ -259,30 +259,30 @@ data:extend({
   -- The interface voices. category "gui-effect" so the player's own interface
   -- volume slider governs them; played globally, never positioned.
   {type = "sound", name = N.sound.ui_click,  category = "gui-effect", volume = s.ui.button_volume,
-   filename = "__oppenheimer-artillery-turret__/sound/ui-click.ogg"},
+   filename = "__oppenheimer-artillery-turret-forked__/sound/ui-click.ogg"},
   {type = "sound", name = N.sound.ui_select, category = "gui-effect", volume = s.ui.button_volume,
-   filename = "__oppenheimer-artillery-turret__/sound/ui-select.ogg"},
+   filename = "__oppenheimer-artillery-turret-forked__/sound/ui-select.ogg"},
   {type = "sound", name = N.sound.ui_arm,    category = "gui-effect", volume = s.ui.volume,
-   filename = "__oppenheimer-artillery-turret__/sound/ui-arm.ogg"},
+   filename = "__oppenheimer-artillery-turret-forked__/sound/ui-arm.ogg"},
   {type = "sound", name = N.sound.ui_notice, category = "gui-effect", volume = s.ui.volume,
-   filename = "__oppenheimer-artillery-turret__/sound/ui-notice.ogg"},
+   filename = "__oppenheimer-artillery-turret-forked__/sound/ui-notice.ogg"},
   {type = "sound", name = N.sound.ui_ok,     category = "gui-effect", volume = s.ui.volume,
-   filename = "__oppenheimer-artillery-turret__/sound/ui-ok.ogg"},
+   filename = "__oppenheimer-artillery-turret-forked__/sound/ui-ok.ogg"},
   {type = "sound", name = N.sound.ui_alert,  category = "gui-effect", volume = s.ui.volume,
-   filename = "__oppenheimer-artillery-turret__/sound/ui-alert.ogg"},
+   filename = "__oppenheimer-artillery-turret-forked__/sound/ui-alert.ogg"},
 })
 
 -- The lightning's thunder, one per strike level (tools/make_thunder.py). Literal paths so verify.py check 11 can resolve each.
 local THUNDER = {
-  [2]  = "__oppenheimer-artillery-turret__/sound/ThunderLevel02.ogg",
-  [3]  = "__oppenheimer-artillery-turret__/sound/ThunderLevel03.ogg",
-  [4]  = "__oppenheimer-artillery-turret__/sound/ThunderLevel04.ogg",
-  [5]  = "__oppenheimer-artillery-turret__/sound/ThunderLevel05.ogg",
-  [6]  = "__oppenheimer-artillery-turret__/sound/ThunderLevel06.ogg",
-  [7]  = "__oppenheimer-artillery-turret__/sound/ThunderLevel07.ogg",
-  [8]  = "__oppenheimer-artillery-turret__/sound/ThunderLevel08.ogg",
-  [9]  = "__oppenheimer-artillery-turret__/sound/ThunderLevel09.ogg",
-  [10] = "__oppenheimer-artillery-turret__/sound/ThunderLevel10.ogg",
+  [2]  = "__oppenheimer-artillery-turret-forked__/sound/ThunderLevel02.ogg",
+  [3]  = "__oppenheimer-artillery-turret-forked__/sound/ThunderLevel03.ogg",
+  [4]  = "__oppenheimer-artillery-turret-forked__/sound/ThunderLevel04.ogg",
+  [5]  = "__oppenheimer-artillery-turret-forked__/sound/ThunderLevel05.ogg",
+  [6]  = "__oppenheimer-artillery-turret-forked__/sound/ThunderLevel06.ogg",
+  [7]  = "__oppenheimer-artillery-turret-forked__/sound/ThunderLevel07.ogg",
+  [8]  = "__oppenheimer-artillery-turret-forked__/sound/ThunderLevel08.ogg",
+  [9]  = "__oppenheimer-artillery-turret-forked__/sound/ThunderLevel09.ogg",
+  [10] = "__oppenheimer-artillery-turret-forked__/sound/ThunderLevel10.ogg",
 }
 
 local thunder = {}

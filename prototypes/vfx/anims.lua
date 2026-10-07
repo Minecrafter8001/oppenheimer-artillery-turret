@@ -205,7 +205,7 @@ function anims.plasma(hold)
   for _, f in ipairs({17, 22, 28, 34, 40}) do seq[#seq + 1] = f end
   return {
     {
-      filename = "__oppenheimer-artillery-turret__/graphics/wave/plasma.png",
+      filename = "__oppenheimer-artillery-turret-forked__/graphics/wave/plasma.png",
       -- THE FIELD THAT DOES THE WORK. draw_as_glow composites additively, so
       -- overlapping stamps ADD instead of occluding each other -- which is what
       -- makes a dense ring read as one continuous hot mass rather than as a
@@ -238,7 +238,7 @@ function anims.plasma_hot(frames)
   for i = 1, n do seq[i] = band[(i - 1) % #band + 1] end
   return {
     {
-      filename = "__oppenheimer-artillery-turret__/graphics/wave/plasma.png",
+      filename = "__oppenheimer-artillery-turret-forked__/graphics/wave/plasma.png",
       draw_as_glow = true,
       priority = "high",
       width = 197,
@@ -281,7 +281,7 @@ function anims.flame(frames)
   end
   return {
     {
-      filename = "__oppenheimer-artillery-turret__/graphics/wave/flame.png",
+      filename = "__oppenheimer-artillery-turret-forked__/graphics/wave/flame.png",
       -- Additive, so a dense stretch of ring ADDS into one hot mass instead of
       -- a hundred sprites occluding each other -- the same reason anims.plasma
       -- sets it.
@@ -313,7 +313,7 @@ function anims.flame_windows(frames, count, spread)
     for i = 0, n - 1 do seq[i + 1] = (start + i) % total + 1 end
     local size = (count > 1) and (1 - spread + 2 * spread * v / (count - 1)) or 1
     out[v + 1] = {
-      filename = "__oppenheimer-artillery-turret__/graphics/wave/flame.png",
+      filename = "__oppenheimer-artillery-turret-forked__/graphics/wave/flame.png",
       draw_as_glow = true,
       priority = "high",
       line_length = 10,

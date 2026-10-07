@@ -9,7 +9,7 @@ local ART = {
   path         = "__base__/graphics/entity/laser-turret/",
   -- The greyscale bake of laser-body.png / laser-end.png. Same sheet layout
   -- (body_px/body_h/body_frames/end_w/end_h below describe both).
-  hot_path     = "__oppenheimer-artillery-turret__/graphics/lance/",
+  hot_path     = "__oppenheimer-artillery-turret-forked__/graphics/lance/",
   base_scale   = 0.5,    -- what base renders this art at
   body_px      = 64,     -- laser-body.png width; 32 px = 1 tile
   body_h       = 12,

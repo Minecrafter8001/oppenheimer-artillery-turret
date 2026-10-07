@@ -129,7 +129,7 @@ data:extend({
     -- The full pad, shown only while placing (C.preview).
     radius_visualisation_specification = C.preview.enabled and {
       sprite = {
-        filename = "__oppenheimer-artillery-turret__/graphics/installation-preview.png",
+        filename = "__oppenheimer-artillery-turret-forked__/graphics/installation-preview.png",
         size = C.preview.sprite_px,
         priority = "extra-high",
       },
@@ -304,7 +304,7 @@ data:extend({
           -- a true loop: any head/tail fade stacks into a dropout every wrap.
           -- Re-cut it with tools/seamless_loop.py, never with a plain trim.
           sound = {
-            filename = "__oppenheimer-artillery-turret__/sound/standby-hum.ogg",
+            filename = "__oppenheimer-artillery-turret-forked__/sound/standby-hum.ogg",
             volume = C.sound.hum_volume,
             audible_distance_modifier = C.sound.hum_distance,
           },
