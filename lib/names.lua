@@ -224,6 +224,7 @@ N.command = {
   hud    = "oppenheimer-hud",
   muzzle = "oppenheimer-muzzle",
   profile = "oppenheimer-profile",
+  preview_clear = "oppenheimer-preview-clear",
 }
 
 N.setting = {

@@ -1092,6 +1092,15 @@ function schema.forget_turret(unit_number)
   if warn and warn.valid then warn.destroy() end
   storage.warn[unit_number] = nil
 
+  local preview = storage.preview and storage.preview[unit_number]
+  if preview then
+    for _, obj in pairs(preview.objs or {}) do
+      local t = type(obj)
+      if (t == "table" or t == "userdata") and obj.valid then obj.destroy() end
+    end
+    storage.preview[unit_number] = nil
+  end
+
   local ids = storage.render[unit_number]
   if ids then
     for _, id in pairs(ids) do

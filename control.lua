@@ -14,7 +14,7 @@ require("scripts.impact")
 require("scripts.beam")
 require("scripts.turret")
 require("scripts.placement")
-require("scripts.render")
+local render = require("scripts.render")
 require("scripts.targeting")
 require("scripts.blueprint")
 require("scripts.gui")
@@ -281,6 +281,29 @@ commands.add_command(
   end
 )
 
+commands.add_command(
+  N.command.preview_clear,
+  {"oppenheimer.preview-clear-command-help"},
+  function(command)
+    local player = command.player_index and game.get_player(command.player_index)
+    if not player then return end
+
+    local cleared = 0
+    local turrets = storage.turrets or {}
+    for unit_number in pairs(storage.preview or {}) do
+      local rec = turrets[unit_number]
+      local e = rec and rec.entity
+      -- Keep known previews force-scoped; orphaned previews have no force to check.
+      if not (e and e.valid) or e.force == player.force then
+        render.preview_clear(unit_number)
+        cleared = cleared + 1
+      end
+    end
+
+    audio.print(player, {"oppenheimer.preview-clear-message", tostring(cleared)})
+  end
+)
+
 local profile = require("scripts.profile")
 commands.add_command(
   N.command.profile,
@@ -316,3 +339,40 @@ commands.add_command(
 )
 events.on_nth_tick(1, profile.tick)
 events.install()
+
+commands.add_command(
+  "oppenheimer-preview-debug",
+  "Inspect Oppenheimer target-preview storage.",
+  function(command)
+    local player = command.player_index and game.get_player(command.player_index)
+    local function out(message)
+      if player then player.print(message) else game.print(message) end
+    end
+
+    local previews = storage.preview or {}
+    local turrets = storage.turrets or {}
+    local count = 0
+
+    for unit, bag in pairs(previews) do
+      count = count + 1
+      local rec = turrets[unit]
+      local e = rec and rec.entity
+      local total, valid = 0, 0
+
+      for _, obj in pairs(bag.objs or {}) do
+        total = total + 1
+        if obj and obj.valid then valid = valid + 1 end
+      end
+
+      out(string.format(
+        "[preview-debug] unit=%s tracked=%s entity-valid=%s force=%s state=%s objects=%d valid-objects=%d",
+        tostring(unit), tostring(rec ~= nil),
+        tostring(e and e.valid or false),
+        e and e.valid and e.force.name or "-",
+        rec and tostring(rec.state) or "-",
+        total, valid))
+    end
+
+    out(string.format("[preview-debug] actual mod preview entries=%d", count))
+  end
+)
